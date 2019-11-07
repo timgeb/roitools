@@ -142,10 +142,10 @@ class BaseRoi(object):
         return info + '\n'
 
     def get_rect(self):
+        'slice rectangular ROI from observed frame (does not apply mask)'
         # would be nice if the mask could be applied directly,
         # but this would require adjusting Frame such that it plays
         # nicely with ufuncs first; see comments on Frame
-        'slice rectangular ROI from observed frame (does not apply mask)'
         frame = self.cap.latest_frame
         return frame[self.st_y:self.end_y, self.st_x:self.end_x]
 
