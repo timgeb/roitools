@@ -69,7 +69,7 @@ for frame in video:
     vidtools.wait(25)
 ```
 
-If no operation needs to be performed on the frame and the goal is to simply play the video, the second snippet can be simplified to
+If no operation needs to be performed on the frame and the goal is to simply play the video, the second snippet can be written even simpler.
 
 ```python
 import vidtools
