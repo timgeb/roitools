@@ -1,0 +1,542 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module roitools</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>roitools</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/tim/prog/python/ROI/roitools/roitools.py">/home/tim/prog/python/ROI/roitools/roitools.py</a></font></td></tr></table>
+    <p><tt>tools&nbsp;for&nbsp;creating&nbsp;and&nbsp;analyzing&nbsp;regions&nbsp;of&nbsp;interest&nbsp;(ROIs)&nbsp;in&nbsp;a&nbsp;video</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="csv.html">csv</a><br>
+</td><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="roitools.html#BaseRoi">BaseRoi</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="roitools.html#CircRoi">CircRoi</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="roitools.html#MeanCircRoi">MeanCircRoi</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="roitools.html#RectRoi">RectRoi</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="roitools.html#MeanRectRoi">MeanRectRoi</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="__builtin__.html#tuple">__builtin__.tuple</a>(<a href="__builtin__.html#object">__builtin__.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="roitools.html#MeanBgrRecord">MeanBgrRecord</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="vidtools.html#PyCap">vidtools.PyCap</a>(<a href="__builtin__.html#object">__builtin__.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="roitools.html#RoiCap">RoiCap</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BaseRoi">class <strong>BaseRoi</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>base&nbsp;class&nbsp;to&nbsp;derive&nbsp;ROIs&nbsp;from<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="BaseRoi-__init__"><strong>__init__</strong></a>(self, vertex1, vertex2, description<font color="#909090">='N/A'</font>, mask<font color="#909090">=None</font>)</dt><dd><tt><a href="#BaseRoi">BaseRoi</a>((x1,&nbsp;y1),&nbsp;(x2,&nbsp;y2)[,&nbsp;description[,&nbsp;mask]])<br>
+-&gt;&nbsp;<a href="#BaseRoi">BaseRoi</a>&nbsp;<a href="__builtin__.html#object">object</a><br>
+&nbsp;<br>
+vertex1&nbsp;and&nbsp;vertex2&nbsp;are&nbsp;opposite&nbsp;vertices&nbsp;of&nbsp;rectangular&nbsp;ROI<br>
+&nbsp;<br>
+mask:&nbsp;boolean&nbsp;array&nbsp;mask&nbsp;applied&nbsp;to&nbsp;rectangular&nbsp;ROI<br>
+&nbsp;<br>
+description:&nbsp;optional&nbsp;description&nbsp;for&nbsp;ROI</tt></dd></dl>
+
+<dl><dt><a name="BaseRoi-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BaseRoi-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BaseRoi-collect"><strong>collect</strong></a>(self)</dt><dd><tt>collect&nbsp;data&nbsp;from&nbsp;observed&nbsp;capture&nbsp;or&nbsp;return&nbsp;None&nbsp;if&nbsp;nothing&nbsp;of<br>
+interest&nbsp;has&nbsp;been&nbsp;observed</tt></dd></dl>
+
+<dl><dt><a name="BaseRoi-contains"><strong>contains</strong></a>(self, point)</dt><dd><tt><a href="#BaseRoi-contains">contains</a>((x,&nbsp;y))&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="BaseRoi-draw"><strong>draw</strong></a>(self)</dt><dd><tt>draw&nbsp;ROI&nbsp;with&nbsp;id&nbsp;on&nbsp;observed&nbsp;frame</tt></dd></dl>
+
+<dl><dt><a name="BaseRoi-draw_id"><strong>draw_id</strong></a>(self)</dt><dd><tt>draws&nbsp;ROI&nbsp;id&nbsp;on&nbsp;observed&nbsp;frame&nbsp;at&nbsp;center&nbsp;of&nbsp;rectangle</tt></dd></dl>
+
+<dl><dt><a name="BaseRoi-draw_outline"><strong>draw_outline</strong></a>(self)</dt><dd><tt>outline&nbsp;the&nbsp;actual&nbsp;ROI&nbsp;area&nbsp;(respecting&nbsp;masks)&nbsp;on&nbsp;observed&nbsp;frame</tt></dd></dl>
+
+<dl><dt><a name="BaseRoi-get_rect"><strong>get_rect</strong></a>(self)</dt><dd><tt>slice&nbsp;rectangular&nbsp;ROI&nbsp;from&nbsp;observed&nbsp;frame&nbsp;(does&nbsp;not&nbsp;apply&nbsp;mask)</tt></dd></dl>
+
+<dl><dt><a name="BaseRoi-info"><strong>info</strong></a>(self)</dt><dd><tt>get&nbsp;ROI&nbsp;info&nbsp;as&nbsp;string</tt></dd></dl>
+
+<dl><dt><a name="BaseRoi-notified"><strong>notified</strong></a>(self)</dt><dd><tt>called&nbsp;on&nbsp;notfication&nbsp;from&nbsp;observable</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>roicolor</strong></dt>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>active_color</strong> = Color(blue=0, green=255, red=0)</dl>
+
+<dl><dt><strong>passive_color</strong> = Color(blue=200, green=200, red=200)</dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="CircRoi">class <strong>CircRoi</strong></a>(<a href="roitools.html#BaseRoi">BaseRoi</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>circular&nbsp;region&nbsp;of&nbsp;interest<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="roitools.html#CircRoi">CircRoi</a></dd>
+<dd><a href="roitools.html#BaseRoi">BaseRoi</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="CircRoi-__init__"><strong>__init__</strong></a>(self, center, radius, description<font color="#909090">='N/A'</font>)</dt><dd><tt><a href="#CircRoi">CircRoi</a>((x,&nbsp;y),&nbsp;radius[,&nbsp;description])&nbsp;-&gt;&nbsp;<a href="#CircRoi">CircRoi</a>&nbsp;<a href="__builtin__.html#object">object</a><br>
+&nbsp;<br>
+description:&nbsp;optional&nbsp;description&nbsp;for&nbsp;ROI</tt></dd></dl>
+
+<dl><dt><a name="CircRoi-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CircRoi-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CircRoi-compute_mask"><strong>compute_mask</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CircRoi-contains"><strong>contains</strong></a>(self, point)</dt><dd><tt><a href="#CircRoi-contains">contains</a>((x,&nbsp;y))&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="CircRoi-draw_outline"><strong>draw_outline</strong></a>(self)</dt><dd><tt>draw&nbsp;circular&nbsp;ROI&nbsp;area&nbsp;on&nbsp;observed&nbsp;frame</tt></dd></dl>
+
+<dl><dt><a name="CircRoi-fits"><strong>fits</strong></a>(self, width, height)</dt><dd><tt>checks&nbsp;whether&nbsp;this&nbsp;ROI&nbsp;fits&nbsp;completely&nbsp;into&nbsp;a&nbsp;frame&nbsp;with&nbsp;given&nbsp;width<br>
+and&nbsp;height&nbsp;with&nbsp;respect&nbsp;to&nbsp;the&nbsp;ROI's&nbsp;center&nbsp;and&nbsp;radius</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="roitools.html#BaseRoi">BaseRoi</a>:<br>
+<dl><dt><a name="CircRoi-collect"><strong>collect</strong></a>(self)</dt><dd><tt>collect&nbsp;data&nbsp;from&nbsp;observed&nbsp;capture&nbsp;or&nbsp;return&nbsp;None&nbsp;if&nbsp;nothing&nbsp;of<br>
+interest&nbsp;has&nbsp;been&nbsp;observed</tt></dd></dl>
+
+<dl><dt><a name="CircRoi-draw"><strong>draw</strong></a>(self)</dt><dd><tt>draw&nbsp;ROI&nbsp;with&nbsp;id&nbsp;on&nbsp;observed&nbsp;frame</tt></dd></dl>
+
+<dl><dt><a name="CircRoi-draw_id"><strong>draw_id</strong></a>(self)</dt><dd><tt>draws&nbsp;ROI&nbsp;id&nbsp;on&nbsp;observed&nbsp;frame&nbsp;at&nbsp;center&nbsp;of&nbsp;rectangle</tt></dd></dl>
+
+<dl><dt><a name="CircRoi-get_rect"><strong>get_rect</strong></a>(self)</dt><dd><tt>slice&nbsp;rectangular&nbsp;ROI&nbsp;from&nbsp;observed&nbsp;frame&nbsp;(does&nbsp;not&nbsp;apply&nbsp;mask)</tt></dd></dl>
+
+<dl><dt><a name="CircRoi-info"><strong>info</strong></a>(self)</dt><dd><tt>get&nbsp;ROI&nbsp;info&nbsp;as&nbsp;string</tt></dd></dl>
+
+<dl><dt><a name="CircRoi-notified"><strong>notified</strong></a>(self)</dt><dd><tt>called&nbsp;on&nbsp;notfication&nbsp;from&nbsp;observable</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="roitools.html#BaseRoi">BaseRoi</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>roicolor</strong></dt>
+</dl>
+<hr>
+Data and other attributes inherited from <a href="roitools.html#BaseRoi">BaseRoi</a>:<br>
+<dl><dt><strong>active_color</strong> = Color(blue=0, green=255, red=0)</dl>
+
+<dl><dt><strong>passive_color</strong> = Color(blue=200, green=200, red=200)</dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="MeanBgrRecord">class <strong>MeanBgrRecord</strong></a>(<a href="__builtin__.html#tuple">__builtin__.tuple</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#MeanBgrRecord">MeanBgrRecord</a>(pos_frames,&nbsp;pos_msec,&nbsp;color)<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="roitools.html#MeanBgrRecord">MeanBgrRecord</a></dd>
+<dd><a href="__builtin__.html#tuple">__builtin__.tuple</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="MeanBgrRecord-__getnewargs__"><strong>__getnewargs__</strong></a>(self)</dt><dd><tt>Return&nbsp;self&nbsp;as&nbsp;a&nbsp;plain&nbsp;<a href="__builtin__.html#tuple">tuple</a>.&nbsp;&nbsp;Used&nbsp;by&nbsp;copy&nbsp;and&nbsp;pickle.</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__getstate__"><strong>__getstate__</strong></a>(self)</dt><dd><tt>Exclude&nbsp;the&nbsp;OrderedDict&nbsp;from&nbsp;pickling</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;nicely&nbsp;formatted&nbsp;representation&nbsp;string</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-_asdict"><strong>_asdict</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;new&nbsp;OrderedDict&nbsp;which&nbsp;maps&nbsp;field&nbsp;names&nbsp;to&nbsp;their&nbsp;values</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-_replace"><strong>_replace</strong></a>(_self, **kwds)</dt><dd><tt>Return&nbsp;a&nbsp;new&nbsp;<a href="#MeanBgrRecord">MeanBgrRecord</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;replacing&nbsp;specified&nbsp;fields&nbsp;with&nbsp;new&nbsp;values</tt></dd></dl>
+
+<hr>
+Class methods defined here:<br>
+<dl><dt><a name="MeanBgrRecord-_make"><strong>_make</strong></a>(cls, iterable, new<font color="#909090">=&lt;built-in method __new__ of type object&gt;</font>, len<font color="#909090">=&lt;built-in function len&gt;</font>)<font color="#909090"><font face="helvetica, arial"> from <a href="__builtin__.html#type">__builtin__.type</a></font></font></dt><dd><tt>Make&nbsp;a&nbsp;new&nbsp;<a href="#MeanBgrRecord">MeanBgrRecord</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;from&nbsp;a&nbsp;sequence&nbsp;or&nbsp;iterable</tt></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="MeanBgrRecord-__new__"><strong>__new__</strong></a>(_cls, pos_frames, pos_msec, color)</dt><dd><tt>Create&nbsp;new&nbsp;instance&nbsp;of&nbsp;<a href="#MeanBgrRecord">MeanBgrRecord</a>(pos_frames,&nbsp;pos_msec,&nbsp;color)</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>Return&nbsp;a&nbsp;new&nbsp;OrderedDict&nbsp;which&nbsp;maps&nbsp;field&nbsp;names&nbsp;to&nbsp;their&nbsp;values</tt></dd>
+</dl>
+<dl><dt><strong>color</strong></dt>
+<dd><tt>Alias&nbsp;for&nbsp;field&nbsp;number&nbsp;2</tt></dd>
+</dl>
+<dl><dt><strong>pos_frames</strong></dt>
+<dd><tt>Alias&nbsp;for&nbsp;field&nbsp;number&nbsp;0</tt></dd>
+</dl>
+<dl><dt><strong>pos_msec</strong></dt>
+<dd><tt>Alias&nbsp;for&nbsp;field&nbsp;number&nbsp;1</tt></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>_fields</strong> = ('pos_frames', 'pos_msec', 'color')</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#tuple">__builtin__.tuple</a>:<br>
+<dl><dt><a name="MeanBgrRecord-__add__"><strong>__add__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__add__">__add__</a>(y)&nbsp;&lt;==&gt;&nbsp;x+y</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__contains__"><strong>__contains__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__contains__">__contains__</a>(y)&nbsp;&lt;==&gt;&nbsp;y&nbsp;in&nbsp;x</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__eq__"><strong>__eq__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__eq__">__eq__</a>(y)&nbsp;&lt;==&gt;&nbsp;x==y</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__ge__"><strong>__ge__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__ge__">__ge__</a>(y)&nbsp;&lt;==&gt;&nbsp;x&gt;=y</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__getitem__"><strong>__getitem__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__getitem__">__getitem__</a>(y)&nbsp;&lt;==&gt;&nbsp;x[y]</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__getslice__"><strong>__getslice__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__getslice__">__getslice__</a>(i,&nbsp;j)&nbsp;&lt;==&gt;&nbsp;x[i:j]<br>
+&nbsp;<br>
+Use&nbsp;of&nbsp;negative&nbsp;indices&nbsp;is&nbsp;not&nbsp;supported.</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__gt__"><strong>__gt__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__gt__">__gt__</a>(y)&nbsp;&lt;==&gt;&nbsp;x&gt;y</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__iter__"><strong>__iter__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__iter__">__iter__</a>()&nbsp;&lt;==&gt;&nbsp;iter(x)</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__le__"><strong>__le__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__le__">__le__</a>(y)&nbsp;&lt;==&gt;&nbsp;x&lt;=y</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__len__"><strong>__len__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__len__">__len__</a>()&nbsp;&lt;==&gt;&nbsp;len(x)</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__lt__"><strong>__lt__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__lt__">__lt__</a>(y)&nbsp;&lt;==&gt;&nbsp;x&lt;y</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__mul__"><strong>__mul__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__mul__">__mul__</a>(n)&nbsp;&lt;==&gt;&nbsp;x*n</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__ne__"><strong>__ne__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__ne__">__ne__</a>(y)&nbsp;&lt;==&gt;&nbsp;x!=y</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-__rmul__"><strong>__rmul__</strong></a>(...)</dt><dd><tt>x.<a href="#MeanBgrRecord-__rmul__">__rmul__</a>(n)&nbsp;&lt;==&gt;&nbsp;n*x</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-count"><strong>count</strong></a>(...)</dt><dd><tt>T.<a href="#MeanBgrRecord-count">count</a>(value)&nbsp;-&gt;&nbsp;integer&nbsp;--&nbsp;return&nbsp;number&nbsp;of&nbsp;occurrences&nbsp;of&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="MeanBgrRecord-index"><strong>index</strong></a>(...)</dt><dd><tt>T.<a href="#MeanBgrRecord-index">index</a>(value,&nbsp;[start,&nbsp;[stop]])&nbsp;-&gt;&nbsp;integer&nbsp;--&nbsp;return&nbsp;first&nbsp;index&nbsp;of&nbsp;value.<br>
+Raises&nbsp;ValueError&nbsp;if&nbsp;the&nbsp;value&nbsp;is&nbsp;not&nbsp;present.</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="MeanCircRoi">class <strong>MeanCircRoi</strong></a>(<a href="roitools.html#CircRoi">CircRoi</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>circular&nbsp;region&nbsp;of&nbsp;interest&nbsp;that&nbsp;collects&nbsp;the&nbsp;mean&nbsp;blue,&nbsp;green&nbsp;and&nbsp;red<br>
+intensities&nbsp;in&nbsp;the&nbsp;observed&nbsp;region&nbsp;for&nbsp;each&nbsp;frame<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="roitools.html#MeanCircRoi">MeanCircRoi</a></dd>
+<dd><a href="roitools.html#CircRoi">CircRoi</a></dd>
+<dd><a href="roitools.html#BaseRoi">BaseRoi</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="MeanCircRoi-__init__"><strong>__init__</strong></a>(self, center, radius, description<font color="#909090">='N/A'</font>, delta_ig<font color="#909090">=0</font>)</dt><dd><tt><a href="#MeanCircRoi">MeanCircRoi</a>((x,&nbsp;y),&nbsp;radius[,&nbsp;description[,&nbsp;delta_ig]])<br>
+-&gt;&nbsp;<a href="#MeanCircRoi">MeanCircRoi</a>&nbsp;<a href="__builtin__.html#object">object</a><br>
+&nbsp;<br>
+description:&nbsp;optional&nbsp;description&nbsp;for&nbsp;ROI<br>
+&nbsp;<br>
+delta_ig:&nbsp;in&nbsp;order&nbsp;to&nbsp;conserve&nbsp;memory,&nbsp;ignore&nbsp;any&nbsp;observed&nbsp;mean<br>
+color&nbsp;that&nbsp;differs&nbsp;less&nbsp;than&nbsp;delta_ig&nbsp;from&nbsp;the&nbsp;last&nbsp;collected&nbsp;color<br>
+for&nbsp;each&nbsp;channel</tt></dd></dl>
+
+<dl><dt><a name="MeanCircRoi-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="MeanCircRoi-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="MeanCircRoi-collect"><strong>collect</strong></a>(self)</dt><dd><tt><a href="#MeanCircRoi-collect">collect</a>()&nbsp;-&gt;&nbsp;<a href="#MeanBgrRecord">MeanBgrRecord</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;or&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="MeanCircRoi-to_file"><strong>to_file</strong></a>(self, datafile, maskfile<font color="#909090">=None</font>)</dt><dd><tt>write&nbsp;info&nbsp;and&nbsp;collected&nbsp;data&nbsp;to&nbsp;datafile,&nbsp;save&nbsp;mask&nbsp;to&nbsp;maskfile</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="roitools.html#CircRoi">CircRoi</a>:<br>
+<dl><dt><a name="MeanCircRoi-compute_mask"><strong>compute_mask</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="MeanCircRoi-contains"><strong>contains</strong></a>(self, point)</dt><dd><tt><a href="#MeanCircRoi-contains">contains</a>((x,&nbsp;y))&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="MeanCircRoi-draw_outline"><strong>draw_outline</strong></a>(self)</dt><dd><tt>draw&nbsp;circular&nbsp;ROI&nbsp;area&nbsp;on&nbsp;observed&nbsp;frame</tt></dd></dl>
+
+<dl><dt><a name="MeanCircRoi-fits"><strong>fits</strong></a>(self, width, height)</dt><dd><tt>checks&nbsp;whether&nbsp;this&nbsp;ROI&nbsp;fits&nbsp;completely&nbsp;into&nbsp;a&nbsp;frame&nbsp;with&nbsp;given&nbsp;width<br>
+and&nbsp;height&nbsp;with&nbsp;respect&nbsp;to&nbsp;the&nbsp;ROI's&nbsp;center&nbsp;and&nbsp;radius</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="roitools.html#BaseRoi">BaseRoi</a>:<br>
+<dl><dt><a name="MeanCircRoi-draw"><strong>draw</strong></a>(self)</dt><dd><tt>draw&nbsp;ROI&nbsp;with&nbsp;id&nbsp;on&nbsp;observed&nbsp;frame</tt></dd></dl>
+
+<dl><dt><a name="MeanCircRoi-draw_id"><strong>draw_id</strong></a>(self)</dt><dd><tt>draws&nbsp;ROI&nbsp;id&nbsp;on&nbsp;observed&nbsp;frame&nbsp;at&nbsp;center&nbsp;of&nbsp;rectangle</tt></dd></dl>
+
+<dl><dt><a name="MeanCircRoi-get_rect"><strong>get_rect</strong></a>(self)</dt><dd><tt>slice&nbsp;rectangular&nbsp;ROI&nbsp;from&nbsp;observed&nbsp;frame&nbsp;(does&nbsp;not&nbsp;apply&nbsp;mask)</tt></dd></dl>
+
+<dl><dt><a name="MeanCircRoi-info"><strong>info</strong></a>(self)</dt><dd><tt>get&nbsp;ROI&nbsp;info&nbsp;as&nbsp;string</tt></dd></dl>
+
+<dl><dt><a name="MeanCircRoi-notified"><strong>notified</strong></a>(self)</dt><dd><tt>called&nbsp;on&nbsp;notfication&nbsp;from&nbsp;observable</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="roitools.html#BaseRoi">BaseRoi</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>roicolor</strong></dt>
+</dl>
+<hr>
+Data and other attributes inherited from <a href="roitools.html#BaseRoi">BaseRoi</a>:<br>
+<dl><dt><strong>active_color</strong> = Color(blue=0, green=255, red=0)</dl>
+
+<dl><dt><strong>passive_color</strong> = Color(blue=200, green=200, red=200)</dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="MeanRectRoi">class <strong>MeanRectRoi</strong></a>(<a href="roitools.html#RectRoi">RectRoi</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>rectangular&nbsp;region&nbsp;of&nbsp;interest&nbsp;that&nbsp;collects&nbsp;the&nbsp;mean&nbsp;blue,&nbsp;green&nbsp;and&nbsp;red<br>
+intensities&nbsp;in&nbsp;the&nbsp;observed&nbsp;region&nbsp;for&nbsp;each&nbsp;frame<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="roitools.html#MeanRectRoi">MeanRectRoi</a></dd>
+<dd><a href="roitools.html#RectRoi">RectRoi</a></dd>
+<dd><a href="roitools.html#BaseRoi">BaseRoi</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="MeanRectRoi-__init__"><strong>__init__</strong></a>(self, vertex1, vertex2, description<font color="#909090">='N/A'</font>, delta_ig<font color="#909090">=0</font>)</dt></dl>
+
+<dl><dt><a name="MeanRectRoi-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="MeanRectRoi-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="MeanRectRoi-collect"><strong>collect</strong></a>(self)</dt><dd><tt><a href="#MeanRectRoi-collect">collect</a>()&nbsp;-&gt;&nbsp;<a href="#MeanBgrRecord">MeanBgrRecord</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;or&nbsp;None</tt></dd></dl>
+
+<dl><dt><a name="MeanRectRoi-to_file"><strong>to_file</strong></a>(self, datafile)</dt><dd><tt>write&nbsp;info&nbsp;and&nbsp;collected&nbsp;data&nbsp;to&nbsp;datafile</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="roitools.html#RectRoi">RectRoi</a>:<br>
+<dl><dt><a name="MeanRectRoi-contains"><strong>contains</strong></a>(self, point)</dt><dd><tt><a href="#MeanRectRoi-contains">contains</a>((x,&nbsp;y))&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="MeanRectRoi-draw_outline"><strong>draw_outline</strong></a>(self)</dt><dd><tt>draw&nbsp;rectangular&nbsp;ROI&nbsp;area&nbsp;on&nbsp;observed&nbsp;frame</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="roitools.html#BaseRoi">BaseRoi</a>:<br>
+<dl><dt><a name="MeanRectRoi-draw"><strong>draw</strong></a>(self)</dt><dd><tt>draw&nbsp;ROI&nbsp;with&nbsp;id&nbsp;on&nbsp;observed&nbsp;frame</tt></dd></dl>
+
+<dl><dt><a name="MeanRectRoi-draw_id"><strong>draw_id</strong></a>(self)</dt><dd><tt>draws&nbsp;ROI&nbsp;id&nbsp;on&nbsp;observed&nbsp;frame&nbsp;at&nbsp;center&nbsp;of&nbsp;rectangle</tt></dd></dl>
+
+<dl><dt><a name="MeanRectRoi-get_rect"><strong>get_rect</strong></a>(self)</dt><dd><tt>slice&nbsp;rectangular&nbsp;ROI&nbsp;from&nbsp;observed&nbsp;frame&nbsp;(does&nbsp;not&nbsp;apply&nbsp;mask)</tt></dd></dl>
+
+<dl><dt><a name="MeanRectRoi-info"><strong>info</strong></a>(self)</dt><dd><tt>get&nbsp;ROI&nbsp;info&nbsp;as&nbsp;string</tt></dd></dl>
+
+<dl><dt><a name="MeanRectRoi-notified"><strong>notified</strong></a>(self)</dt><dd><tt>called&nbsp;on&nbsp;notfication&nbsp;from&nbsp;observable</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="roitools.html#BaseRoi">BaseRoi</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>roicolor</strong></dt>
+</dl>
+<hr>
+Data and other attributes inherited from <a href="roitools.html#BaseRoi">BaseRoi</a>:<br>
+<dl><dt><strong>active_color</strong> = Color(blue=0, green=255, red=0)</dl>
+
+<dl><dt><strong>passive_color</strong> = Color(blue=200, green=200, red=200)</dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="RectRoi">class <strong>RectRoi</strong></a>(<a href="roitools.html#BaseRoi">BaseRoi</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>simple&nbsp;rectangular&nbsp;region&nbsp;of&nbsp;interest<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="roitools.html#RectRoi">RectRoi</a></dd>
+<dd><a href="roitools.html#BaseRoi">BaseRoi</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="RectRoi-__init__"><strong>__init__</strong></a>(self, vertex1, vertex2, description<font color="#909090">='N/A'</font>)</dt><dd><tt><a href="#RectRoi">RectRoi</a>((x1,&nbsp;y1),&nbsp;(x2,&nbsp;y2)[,&nbsp;description])&nbsp;-&gt;&nbsp;<a href="#RectRoi">RectRoi</a>&nbsp;<a href="__builtin__.html#object">object</a><br>
+&nbsp;<br>
+vertex1&nbsp;and&nbsp;vertex2&nbsp;are&nbsp;opposite&nbsp;vertices&nbsp;of&nbsp;the&nbsp;rectangle<br>
+description:&nbsp;optional&nbsp;description&nbsp;for&nbsp;ROI</tt></dd></dl>
+
+<dl><dt><a name="RectRoi-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="RectRoi-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="RectRoi-contains"><strong>contains</strong></a>(self, point)</dt><dd><tt><a href="#RectRoi-contains">contains</a>((x,&nbsp;y))&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="RectRoi-draw_outline"><strong>draw_outline</strong></a>(self)</dt><dd><tt>draw&nbsp;rectangular&nbsp;ROI&nbsp;area&nbsp;on&nbsp;observed&nbsp;frame</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="roitools.html#BaseRoi">BaseRoi</a>:<br>
+<dl><dt><a name="RectRoi-collect"><strong>collect</strong></a>(self)</dt><dd><tt>collect&nbsp;data&nbsp;from&nbsp;observed&nbsp;capture&nbsp;or&nbsp;return&nbsp;None&nbsp;if&nbsp;nothing&nbsp;of<br>
+interest&nbsp;has&nbsp;been&nbsp;observed</tt></dd></dl>
+
+<dl><dt><a name="RectRoi-draw"><strong>draw</strong></a>(self)</dt><dd><tt>draw&nbsp;ROI&nbsp;with&nbsp;id&nbsp;on&nbsp;observed&nbsp;frame</tt></dd></dl>
+
+<dl><dt><a name="RectRoi-draw_id"><strong>draw_id</strong></a>(self)</dt><dd><tt>draws&nbsp;ROI&nbsp;id&nbsp;on&nbsp;observed&nbsp;frame&nbsp;at&nbsp;center&nbsp;of&nbsp;rectangle</tt></dd></dl>
+
+<dl><dt><a name="RectRoi-get_rect"><strong>get_rect</strong></a>(self)</dt><dd><tt>slice&nbsp;rectangular&nbsp;ROI&nbsp;from&nbsp;observed&nbsp;frame&nbsp;(does&nbsp;not&nbsp;apply&nbsp;mask)</tt></dd></dl>
+
+<dl><dt><a name="RectRoi-info"><strong>info</strong></a>(self)</dt><dd><tt>get&nbsp;ROI&nbsp;info&nbsp;as&nbsp;string</tt></dd></dl>
+
+<dl><dt><a name="RectRoi-notified"><strong>notified</strong></a>(self)</dt><dd><tt>called&nbsp;on&nbsp;notfication&nbsp;from&nbsp;observable</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="roitools.html#BaseRoi">BaseRoi</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>roicolor</strong></dt>
+</dl>
+<hr>
+Data and other attributes inherited from <a href="roitools.html#BaseRoi">BaseRoi</a>:<br>
+<dl><dt><strong>active_color</strong> = Color(blue=0, green=255, red=0)</dl>
+
+<dl><dt><strong>passive_color</strong> = Color(blue=200, green=200, red=200)</dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="RoiCap">class <strong>RoiCap</strong></a>(<a href="vidtools.html#PyCap">vidtools.PyCap</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>video&nbsp;capture&nbsp;that&nbsp;supports&nbsp;regions&nbsp;of&nbsp;interest&nbsp;(ROIs)<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="roitools.html#RoiCap">RoiCap</a></dd>
+<dd><a href="vidtools.html#PyCap">vidtools.PyCap</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="RoiCap-__init__"><strong>__init__</strong></a>(self, video, title<font color="#909090">=None</font>)</dt><dd><tt><a href="#RoiCap">RoiCap</a>(path&nbsp;or&nbsp;device&nbsp;id)&nbsp;-&gt;&nbsp;<a href="#RoiCap">RoiCap</a>&nbsp;<a href="__builtin__.html#object">object</a></tt></dd></dl>
+
+<dl><dt><a name="RoiCap-add_roi"><strong>add_roi</strong></a>(self, roi)</dt><dd><tt>register&nbsp;a&nbsp;new&nbsp;ROI</tt></dd></dl>
+
+<dl><dt><a name="RoiCap-delete_roi"><strong>delete_roi</strong></a>(self, roi_id)</dt><dd><tt>delete&nbsp;ROI&nbsp;by&nbsp;ID</tt></dd></dl>
+
+<dl><dt><a name="RoiCap-draw_rois"><strong>draw_rois</strong></a>(self)</dt><dd><tt>draw&nbsp;all&nbsp;rois</tt></dd></dl>
+
+<dl><dt><a name="RoiCap-next"><strong>next</strong></a>(self)</dt><dd><tt>get&nbsp;next&nbsp;frame,&nbsp;notify&nbsp;ROIs,&nbsp;draw&nbsp;ROIs</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="vidtools.html#PyCap">vidtools.PyCap</a>:<br>
+<dl><dt><a name="RoiCap-__enter__"><strong>__enter__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="RoiCap-__exit__"><strong>__exit__</strong></a>(self, exc_type, exc_val, exc_tb)</dt></dl>
+
+<dl><dt><a name="RoiCap-__getattr__"><strong>__getattr__</strong></a>(self, attr)</dt></dl>
+
+<dl><dt><a name="RoiCap-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="RoiCap-__setattr__"><strong>__setattr__</strong></a>(self, attr, value)</dt></dl>
+
+<dl><dt><a name="RoiCap-info"><strong>info</strong></a>(self)</dt><dd><tt>return&nbsp;video&nbsp;information&nbsp;as&nbsp;string</tt></dd></dl>
+
+<dl><dt><a name="RoiCap-open"><strong>open</strong></a>(self)</dt><dd><tt>open&nbsp;the&nbsp;capture&nbsp;if&nbsp;not&nbsp;already&nbsp;opened</tt></dd></dl>
+
+<dl><dt><a name="RoiCap-play"><strong>play</strong></a>(self, delay<font color="#909090">=None</font>, start<font color="#909090">=None</font>, stop<font color="#909090">=None</font>, rewind<font color="#909090">=False</font>)</dt><dd><tt>play&nbsp;the&nbsp;video&nbsp;from&nbsp;its&nbsp;current&nbsp;position<br>
+&nbsp;<br>
+delay:&nbsp;wait&nbsp;delay&nbsp;milliseconds&nbsp;after&nbsp;showing&nbsp;a&nbsp;frame;<br>
+if&nbsp;delay&nbsp;is&nbsp;None,&nbsp;waits&nbsp;int(ceil(1000.0/fps))&nbsp;ms&nbsp;if&nbsp;fps<br>
+is&nbsp;available,&nbsp;else&nbsp;waits&nbsp;1&nbsp;ms<br>
+&nbsp;<br>
+start:&nbsp;play&nbsp;from&nbsp;start&nbsp;pos_msec&nbsp;or&nbsp;from&nbsp;current&nbsp;position<br>
+if&nbsp;start&nbsp;is&nbsp;None<br>
+&nbsp;<br>
+stop:&nbsp;play&nbsp;to&nbsp;stop&nbsp;pos_msec&nbsp;or&nbsp;play&nbsp;to&nbsp;last&nbsp;frame&nbsp;and&nbsp;rewind<br>
+if&nbsp;stop&nbsp;is&nbsp;None<br>
+&nbsp;<br>
+rewind:&nbsp;if&nbsp;True,&nbsp;release&nbsp;and&nbsp;reopen&nbsp;capture&nbsp;if&nbsp;played&nbsp;to&nbsp;end</tt></dd></dl>
+
+<dl><dt><a name="RoiCap-release"><strong>release</strong></a>(self)</dt></dl>
+
+<hr>
+Data descriptors inherited from <a href="vidtools.html#PyCap">vidtools.PyCap</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>
