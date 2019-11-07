@@ -50,7 +50,14 @@ def pause():
     cv2.waitKey(0)
 
 class PyCap(object):
-    'Python adapter/facade for cv2.VideoCapture'
+    '''Python adapter/facade for cv2.VideoCapture
+    
+    - instance attributes can be accessed/set directly via the dot notation,
+    e.g. cap.pos_msec = 1000 instead of cap.set(cv2.CAP_PROP_POS_MSEC, 1000)
+
+    - instances are iterable
+
+    - iteration yields Frame objects (numpy arrays with extra methods)'''
 
     def __init__(self, video, title=None):
         'PyCap(path) -> PyCap object'
@@ -89,7 +96,7 @@ class PyCap(object):
             super(PyCap, self).__setattr__(attr, value)
 
     def info(self):
-        'return video information'
+        'return video information as string'
         template = '{{: <{}}} {{}}\n'.format(len(max(_prop2id, key=len)))
         info = ''.join(
             [template.format(prop, getattr(self, prop)) for prop in _prop2id])
@@ -119,15 +126,18 @@ class PyCap(object):
         self.open()
 
     def play(self, delay=None, start=None, stop=None, rewind=False):
-        '''play the video from current position
+        '''play the video from its current position
 
         delay: wait delay milliseconds after showing a frame;
         if delay is None, waits int(ceil(1000.0/fps)) ms if fps
         is available, else waits 1 ms
+
         start: play from start pos_msec or from current position
         if start is None
+
         stop: play to stop pos_msec or play to last frame and rewind
         if stop is None
+
         rewind: if True, release and reopen capture if played to end'''
         if delay is None:
             has_fps = not (np.isnan(self.fps) or self.fps == 0)

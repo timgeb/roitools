@@ -13,7 +13,7 @@ from vidtools import Color, PyCap
 # ROIs: observers, RoiCap: observable
 
 class RoiCap(PyCap):
-    'capture that supports regions of interest (ROIs)'
+    'video capture that supports regions of interest (ROIs)'
 
     _max_rois = 100
 
@@ -38,7 +38,7 @@ class RoiCap(PyCap):
         del self.rois[roi_id]
 
     def _notify_rois(self):
-        'notify all ROIs of change'
+        'notify all ROIs on change'
         for roi in self.rois.viewvalues():
             roi.notified()
 
@@ -77,7 +77,9 @@ class BaseRoi(object):
         -> BaseRoi object
 
         vertex1 and vertex2 are opposite vertices of rectangular ROI
+
         mask: boolean array mask applied to rectangular ROI
+
         description: optional description for ROI'''
         self._id = BaseRoi._next_id
         BaseRoi._next_id += 1
@@ -114,7 +116,7 @@ class BaseRoi(object):
         return 'BaseRoi(vertex1={}, vertex2={}, ...)'.format(vertex1, vertex2)
 
     def notified(self):
-        'got notfication from observable'
+        'called on notfication from observable'
         if self.deaf:
             return
 
@@ -322,6 +324,7 @@ class MeanCircRoi(CircRoi):
         -> MeanCircRoi object
 
         description: optional description for ROI
+
         delta_ig: in order to conserve memory, ignore any observed mean
         color that differs less than delta_ig from the last collected color
         for each channel'''
@@ -346,6 +349,9 @@ class MeanCircRoi(CircRoi):
         _to_file_mean_bgr(instance=self, datafile=datafile, maskfile=maskfile)
 
 class MeanRectRoi(RectRoi):
+    '''rectangular region of interest that collects the mean blue, green and red
+    intensities in the observed region for each frame'''
+
     def __init__(self, vertex1, vertex2, description='N/A', delta_ig=0):
         super(MeanRectRoi, self).__init__(vertex1, vertex2, description)
         self.delta_ig = delta_ig
