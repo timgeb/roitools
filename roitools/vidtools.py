@@ -1,4 +1,4 @@
-# pythonic interface for some cv2 functionality
+'pythonic facade for for some cv2 functionality'
 
 # TODO port to Python 3 ...
 

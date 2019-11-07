@@ -1,4 +1,4 @@
-# tools for creating and analyzing regions of interest
+'tools for creating and analyzing regions of interest (ROIs) in a video'
 
 import csv
 from collections import namedtuple

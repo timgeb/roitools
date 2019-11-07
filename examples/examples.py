@@ -1,7 +1,8 @@
-# examples and helpers for vidtools and roitools users
+'''examples and helpers for vidtools and roitools users
 
-# regions are expected to be MeanRectRoi or MeanCircRoi instances
-# the main functions for data collection are get_roidata and collect_plot_export
+Functions accepting ROIs work with MeanRectRoi or MeanCircRoi instances.
+
+The main data collection functions are get_roidata and collect_plot_export.'''
 
 from collections import deque
 from datetime import datetime
@@ -14,7 +15,7 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
-# import useful objects for the user if script is executed directly
+# (try to) import useful objects for the user if script is executed directly
 if __name__ == '__main__' and __package__ is None:
     # add roitools directory to path
     dirname = os.path.dirname

@@ -1,6 +1,4 @@
-#!/usr/bin/env python2.7
-
-# a GUI for planning regions of interest on a video
+'a GUI for planning regions of interest in a video'
 
 # NOTE: naming conventions for global variables
 # - Tkinter widgets/frames: preceded by tk_
