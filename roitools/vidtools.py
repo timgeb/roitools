@@ -212,6 +212,16 @@ class Frame(np.ndarray):
             # title is set) we just forward the value to the new instance
             self.title = getattr(from_array, 'title', 'unnamed')
 
+    def adjust_brightness(self, offset):
+        '''brighten or darken the frame in-place by integer offset
+        offset > 0: brightness up
+        offset < 0: brightness down'''
+
+        if offset != 0:
+            h, s, v = cv2.split(cv2.cvtColor(self, cv2.COLOR_BGR2HSV, self))
+            cv2.add(v, offset, v)
+            cv2.cvtColor(cv2.merge((h, s, v)), cv2.COLOR_HSV2BGR, self)
+
     def show(self):
         '''shows the frame
 

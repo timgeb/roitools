@@ -450,7 +450,7 @@ def roi_info_dict(roi):
 # --- CLASSES FOR PLAYBACK ---
 class RoiVideo(roitools.RoiCap):
     '''modified/extended RoiCap for use in this GUI
-    (allows to set the brightness and converts frames from BGR to RGB)'''
+    (keeps track of a brightness offset and yields RGB frames)'''
     # NOTE: a video should be decoupled from the GUI and not initiate
     # interaction with widgets
 
@@ -460,15 +460,6 @@ class RoiVideo(roitools.RoiCap):
 
     def _bgr_to_rgb(self, frame):
         cv2.cvtColor(frame, cv2.COLOR_BGR2RGB, frame)
-
-    def _apply_offset(self, frame):
-        'applies brightness offset to BGR frame'
-        if self.brightness_offset == 0:
-            return
-
-        h, s, v = cv2.split(cv2.cvtColor(frame, cv2.COLOR_BGR2HSV, frame))
-        cv2.add(v, self.brightness_offset, v)
-        cv2.cvtColor(cv2.merge((h, s, v)), cv2.COLOR_HSV2BGR, frame)
 
     def draw_active_rois(self):
         for roi in self.rois.viewvalues():
@@ -483,7 +474,7 @@ class RoiVideo(roitools.RoiCap):
         frame = self.latest_frame_original.copy()
 
         # apply brightness offset before drawing ROIs
-        self._apply_offset(frame)
+        frame.adjust_brightness(self._brightness_offset)
 
         # redraw rois before converting from BGR to RGB
         self.latest_frame = frame
