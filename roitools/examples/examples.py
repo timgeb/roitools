@@ -22,8 +22,7 @@ if __name__ == '__main__' and __package__ is None:
 
     abs_path = os.path.abspath(sys.argv[0])
     one_up = dirname(dirname(abs_path))
-    roitools_path = os.path.join(one_up, 'roitools')
-    sys.path.insert(0, roitools_path)
+    sys.path.insert(0, one_up)
 
     # imports
     try:
