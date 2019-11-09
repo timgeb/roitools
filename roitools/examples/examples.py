@@ -129,6 +129,8 @@ def get_roidata(videopath, roi_specs):
                 insertion_order.popleft()
                 screenshot_next_frame = True
                 cap.add_roi(roi)
+                # manually notify ROI in order to not miss current frame
+                roi.notified()
             else:
                 break
 
