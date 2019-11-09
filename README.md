@@ -98,7 +98,7 @@ roi = MeanCircRoi((100, 100), 20)
 video.add_roi(roi)
 ```
 
-For the ROI to collect data over the course of the entire video, it is enough to generate every frame.
+For the ROI to collect data over the course of the entire video, it is enough to generate every frame. (This may take a while.)
 
 ```python
 for frame in video:
@@ -120,7 +120,7 @@ import numpy as np
 
 class CountBlackRectRoi(RectRoi):
     def collect(self):
-        '''called when observed RoiCap reads a frame,
+        '''called when observed RoiCap advances a frame,
         counts black pixels in current frame'''
 
         # cut out rectangular region from observed frame
@@ -137,4 +137,6 @@ If the collected data needs to be exported, implementing a `to_file` method is s
 
 ## ROI Planning
 
-TODO
+Planning the exact location and lifespan of regions of interest can be tedious without visual assistance. This software comes with a graphical user interface for the planning process. A screenshot is shown below.
+
+![GUI](docs/gui.png)
