@@ -42,7 +42,7 @@ The video has not been edited.
 
 -------------------------------------------------------------------------
 
-traffic_light.mp4
+traffic_light.mp4, traffic_light_small.mp4
 
 Title:
 ROYALTY FREE VIDEO FOOTAGE : Traffic Lights Green Amber Red NO FEE
@@ -58,7 +58,7 @@ License:
 CC BY 3.0
 https://creativecommons.org/licenses/by/3.0/
 
-The video has not been edited.
+The videos have been rescaled.
 
 -------------------------------------------------------------------------
 
