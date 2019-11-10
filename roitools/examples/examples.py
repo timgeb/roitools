@@ -59,6 +59,24 @@ def concat_arrays(arrays):
     'concats arrays vertically'
     return np.vstack(arrays)
 
+def ms_to_frame(pos_msec, fps, ceil=True):
+    '''convert pos_msec to corresponding pos_frames of a RoiCap with given fps
+
+    ceil: if True, round up frame values lower than one to one'''
+    frame = int(pos_msec*fps/1000.0)
+    if ceil:
+        frame = max(frame, 1)
+    return frame
+
+def frame_to_ms(pos_frames, fps, ceil=True):
+    '''convert pos_frames to corresponding pos_msec of a RoiCap with given fps
+
+    ceil: if True, returns at least 1000.0/fps (pos_msec of first frame)'''
+    msec = 1000.0*pos_frames/fps
+    if ceil:
+        msec = max(msec, 1000.0/fps)
+    return msec
+
 def _set_up_result_directory(videopath):
     'helper function to set up a directory for result files'
     dirname = os.path.dirname(videopath)
@@ -86,7 +104,11 @@ def get_roidata(videopath, roi_specs):
     lets regions in roi_specs collect data during their lifetime
 
     will dump all results and region screenshots into a new directory located
-    in the same directory as the video, returns path'''
+    in the same directory as the video file, returns path'''
+
+    # work?
+    if not roi_specs:
+        return
 
     # set up a directory for results
     saveto = _set_up_result_directory(videopath)
@@ -95,64 +117,75 @@ def get_roidata(videopath, roi_specs):
     with open(os.path.join(saveto, 'roi_specs.py'), 'w') as f:
         pretty_print(roi_specs, f)
 
+    # msec -> frame
+    cap = RoiCap(videopath)
+    roi_specs = [(roi, ms_to_frame(start, cap.fps), ms_to_frame(end, cap.fps))
+                 for roi, start, end in roi_specs]
+
     # set up queues for insertion/deletion
     insertion_order = deque(
         sorted(roi_specs, key=lambda (roi, birth, death): birth))
     deletion_order = deque(
         sorted(insertion_order, key=lambda (roi, birth, death): death))
 
-    # iterate video
-    cap = RoiCap(videopath)
+    # get last interesting frame number for progress-print
+    last_deletion_frame = min(deletion_order[-1][2], cap.frame_count)
 
-    screenshot_next_frame = False
-    for frame in cap:
+    while True:
         # NOTE: fast forwarding to the next birth/death (via cap.play) instead
         # of executing loop body for every frame has been tried and does not
         # seem to yield a noticeable performance boost compared to this simpler
         # version
         # also, skipping via setting attributes seems to be non-exact for some
         # types of videos -> see comments in image_series function
-        print '{:.1f} %\r'.format(100*cap.pos_frames/cap.frame_count),
-        sys.stdout.flush()
 
-        # save screenshot
-        if screenshot_next_frame:
-            im_filename = 'frame_{}.png'.format(int(cap.pos_frames))
-            frame.save(os.path.join(saveto, im_filename))
-            screenshot_next_frame = False
-
-        # add rois
+        # add ROIs
+        take_screenshot = False
         while insertion_order:
             roi, birth, _ = insertion_order[0]
 
-            if cap.pos_msec >= birth:
+            if cap.pos_frames + 1 == birth:
                 insertion_order.popleft()
-                screenshot_next_frame = True
                 cap.add_roi(roi)
-                # manually notify ROI in order to not miss current frame
-                roi.notified()
+                take_screenshot = True
             else:
                 break
+
+        # generate next frame, draw ROIs
+        try:
+            frame = next(cap)
+        except StopIteration:
+            break
+
+        # if ROIs were added, take screenshot
+        if take_screenshot:
+            im_filename = 'frame_{}.png'.format(int(cap.pos_frames))
+            frame.save(os.path.join(saveto, im_filename))
 
         # delete rois
         while deletion_order:
             roi, _, death = deletion_order[0]
-            if cap.pos_msec >= death:
+            if cap.pos_frames == death:
                 deletion_order.popleft()
                 save_roi(roi, saveto)
                 cap.delete_roi(roi._id)
             else:
                 break
 
-        # abort if no further observing planned
+        # abort if all data is already collected
         if not cap.rois and not insertion_order:
             break
+
+        # show progress
+        print '{:.1f} %\r'.format(100.0*cap.pos_frames/last_deletion_frame),
+        sys.stdout.flush()
 
     # save leftover rois (with death > video length)
     for roi in cap.rois.itervalues():
         save_roi(roi, saveto)
 
     # save a screenshot of all rois
+    cap.rois = {}
     cap.pos_frames -= 1
     for roi, _, _ in roi_specs:
         cap.add_roi(roi)
