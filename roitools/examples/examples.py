@@ -15,6 +15,12 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
+# run as module with -m from root directory?
+try:
+    from roitools.roitools import RoiCap
+except ImportError:
+    pass
+
 # (try to) import useful objects for the user if script is executed directly
 if __name__ == '__main__' and __package__ is None:
     # add roitools directory to path
@@ -33,6 +39,7 @@ if __name__ == '__main__' and __package__ is None:
         from roitools import RoiCap, MeanBgrRecord, MeanRectRoi, MeanCircRoi
     except ImportError:
         pass
+
 
 def reset_roi_ids():
     'make new ROIs start at id 1 again'
