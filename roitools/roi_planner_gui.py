@@ -15,6 +15,8 @@
 # example: sym_white_circle = u'\u25CB'
 
 # TODO: refactoring -> RoiBox class for listboxes? Move ROI related helpers?
+# TODO: allow adding ROIs via clicking and dragging the mouse, similar to
+# (or making use of) cv2.selectROI
 # TODO: preview of ROI position on video-mouseover?
 
 # standard library imports
