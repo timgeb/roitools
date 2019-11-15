@@ -15,6 +15,7 @@
 # example: sym_white_circle = u'\u25CB'
 
 # TODO: refactoring -> RoiBox class for listboxes? Move ROI related helpers?
+# TODO: preview of ROI position on video-mouseover?
 
 # standard library imports
 from __future__ import division
@@ -1555,6 +1556,7 @@ set_widget_states_unloaded = partial(
 # properly while playing - see cb_bar_set_frame for details
 set_widget_states_loaded = partial(
     set_widget_states, ALL_WIDGETS - {tk_bar}, tk.NORMAL)
+# ----------------------------------
 
 if __name__ == '__main__':
     set_widget_states_unloaded()
