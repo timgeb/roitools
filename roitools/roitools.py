@@ -29,7 +29,7 @@ class RoiCap(PyCap):
             self.rois[roi._id] = roi
             roi.cap = self
         else:
-            template = 'cannot have more than {} active regions'
+            template = 'cannot have more than {} regions'
             msg = template.format(RoiCap._max_rois)
             raise ValueError(msg)
 
@@ -236,19 +236,6 @@ class CircRoi(BaseRoi):
                 mask[y][x] = True
 
         return mask
-
-    def fits(self, width, height):
-        '''checks whether this ROI fits completely into a frame with given width
-        and height with respect to the ROI's center and radius'''
-        x, y = self.center
-
-        in_bounds = not (
-            x - self.radius < 0 or
-            y - self.radius < 0 or
-            x + self.radius >= width or
-            y + self.radius >= height)
-
-        return in_bounds
 
     def __str__(self):
         return 'CircRoi(center={}, radius={})'.format(self.center, self.radius)

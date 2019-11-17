@@ -15,9 +15,14 @@
 # example: sym_white_circle = u'\u25CB'
 
 # TODO: refactoring -> RoiBox class for listboxes? Move ROI related helpers?
-# TODO: allow adding ROIs via clicking and dragging the mouse, similar to
-# (or making use of) cv2.selectROI
-# TODO: preview of ROI position on video-mouseover?
+
+# TODO: (option to) show preview of ROI w.r.t current parameters
+# on video-mouseover?
+
+# TODO: coupling between the player, its canvas and its video is too tight
+# - both player and canvas unidirectionally interact with the video
+# - player and canvas interact bidirectionally
+# (this is not optimal, but not hard to disentangle)
 
 # standard library imports
 from __future__ import division
@@ -323,6 +328,11 @@ def make_scrolled_listbox(
 # ------------------------------------------------------------------
 
 # --- MISCELLANEOUS HELPERS ---
+def bgr_to_hex(b, g, r):
+    '''bgr color intensities to hex rgb notation
+    example: bgr_to_hex(16, 32, 64) -> #402010'''
+    return '#{:02x}{:02x}{:02x}'.format(r, g, b)
+
 def walk_widgets(root):
     'yield all descendants of a frame'
     for child in root.winfo_children():
@@ -355,8 +365,7 @@ def check_empty(value, description=None):
     'issues warning and raises ValueError if value is the empty string'
     if value == '':
         msg = 'missing {} value'.format(description or '')
-        tk_log.error(msg)
-        raise ValueError
+        raise ValueError(msg)
 # -----------------------------
 
 # -- ROI RELATED HELPERS ---
@@ -369,8 +378,8 @@ class DummyCircRoi(roitools.CircRoi):
         'does nothing'
         pass
 
-def roi_from_click(click_x, click_y):
-    'construct a ROI from click-coordinates and ROI selection parameters'
+def construct_roi_from_params(x, y):
+    'construct a ROI with center (x, y) and w.r.t. current region parameters'
     rtype = tkvar_roitype.get()
 
     if rtype == RECTANGULAR:
@@ -380,20 +389,35 @@ def roi_from_click(click_x, click_y):
         check_empty(height_str, 'region height')
         width, height = int(width_str), int(height_str)
 
-        # construct vertices such that region center is at click position
+        # construct vertices such that (x, y) is region center
         vertex1 = (
-            click_x - width//2,
-            click_y - height//2)
+            x - width//2,
+            y - height//2)
         vertex2 = (
-            int(click_x + math.ceil(width/2.0)),
-            int(click_y + math.ceil(height/2.0)))
+            int(x + math.ceil(width/2.0)),
+            int(y + math.ceil(height/2.0)))
 
         roi = roitools.RectRoi(vertex1, vertex2)
 
     elif rtype == CIRCULAR:
         radius_str = tkvar_radius.get()
         check_empty(radius_str, 'region radius')
-        roi = DummyCircRoi((click_x, click_y), int(radius_str))
+        radius = int(radius_str)
+
+        # check if this ROI can fit
+        # TODO I really need to start supporting partial circular ROIs
+        # in order to get rid of this mess
+        in_bounds = not (
+            x - radius < 0 or
+            y - radius < 0 or
+            x + radius >= PLAYER.video.frame_width or
+            y + radius >= PLAYER.video.frame_height)
+
+        if in_bounds:
+            roi = DummyCircRoi((x, y), radius)
+        else:
+            msg = 'region out of frame - partial circles are not supported yet'
+            raise ValueError(msg)
 
     return roi
 
@@ -452,12 +476,19 @@ def roi_info_dict(roi):
 class RoiVideo(roitools.RoiCap):
     '''modified/extended RoiCap for use in this GUI
     (keeps track of a brightness offset and yields RGB frames)'''
-    # NOTE: a video should be decoupled from the GUI and not initiate
-    # interaction with widgets
+
+    # NOTE: I'd like to keep this from initiating interactions with widgets,
+    # if possible
 
     def __init__(self, *args, **kwargs):
         self._brightness_offset = 0
         super(RoiVideo, self).__init__(*args, **kwargs)
+
+    def add_roi(self, roi):
+        'register new ROI and add starting timestamps to ROI on success'
+        super(RoiVideo, self).add_roi(roi)
+        roi.start_pos_msec = self.pos_msec
+        roi.start_pos_frames = self.pos_frames
 
     def _bgr_to_rgb(self, frame):
         cv2.cvtColor(frame, cv2.COLOR_BGR2RGB, frame)
@@ -516,9 +547,9 @@ class VideoCaptureError(Exception):
 
 class VideoPlayer(object):
     'class that mimics a video player'
-    # NOTE: the player should be decoupled from the GUI as strictly as
-    # possible and not initiate interaction with outside widgets
-    # (interaction with own display window/canvas is OK)
+    # NOTE: I would like the player to be decoupled from widgets as strictly
+    # as possible, i.e. no initiation of interactions with widgets from here
+    # (I could not reasonably prevent the canvas from doing it, though)
 
     # NOTE: methods intended to be called from outside (not preceded by _)
     # should perform actions that could reasonably be imagined to be found
@@ -661,8 +692,8 @@ class VideoPlayer(object):
         self._window.resizable(False, False)
 
         # set up canvas
-        self._canvas = tk.Canvas(
-            self._window, height=self.video.frame_height,
+        self._canvas = TouchScreen(
+            player=self, master=self._window, height=self.video.frame_height,
             width=self.video.frame_width, **no_border)
         self._canvas.grid(row=0, column=0)
 
@@ -671,9 +702,6 @@ class VideoPlayer(object):
 
         # let space bar pause/resume
         self._window.bind('<space>', lambda _: self.toggle_play())
-
-        # let left click add ROI
-        self._canvas.bind('<Button-1>', cb_add_roi)
 
     def _manage_playback_scheduling(self):
         '''to be called directly after showing a frame during playback!
@@ -731,6 +759,98 @@ class VideoPlayer(object):
         image = ImageTk.PhotoImage(image=Image.fromarray(frame))
         self._image = image # prevent garbage collection!
         self._canvas.create_image(0, 0, anchor=tk.NW, image=image)
+
+class TouchScreen(tk.Canvas, object):
+    '''a canvas for use with a VideoPlayer instance
+    which supports mouse actions ("touching") to add ROIs
+    
+    right click -> add ROI with current region parameters
+    left click + drag -> add rectangular ROI at selected area'''
+
+    def _re_init(self):
+        # keep track of the starting position of a mouse rectangle selection
+        self._start_x = None
+        self._start_y = None
+    
+        # delete last selection rectangle
+        if getattr(self, '_rect', None) is not None:
+            self.delete(self._rect)
+        self._rect = None
+
+    def __init__(self, player, master=None, **kwargs):
+        super(TouchScreen, self).__init__(master, **kwargs)
+        self._player = player
+        self._re_init()
+
+        # right click -> add ROI with current region parameters
+        self.bind('<Button-3>', self._rclick_add_roi)
+
+        # left click and drag -> add ROI at area of selected rectangle
+        self.bind('<Button-1>', self._lclick)
+        self.bind('<B1-Motion>', self._ldrag)
+        self.bind('<ButtonRelease-1>', self._lrelease_add_roi)
+
+    def _canvas_xy(self, event):
+        'convert event x, y coordinates to canvas x, y coordinates as integers'
+        x = self.canvasx(event.x)
+        y = self.canvasx(event.y)
+        return int(x), int(y)
+
+    def _rclick_add_roi(self, event):
+        'right click adds ROI w.r.t. current region parameters'
+        x, y = self._canvas_xy(event)
+
+        try:
+            roi = construct_roi_from_params(x, y)
+        except ValueError as e:
+            tk_log.error(str(e))
+        else:
+            self._add_roi_helper(roi)
+
+    def _lclick(self, event):
+        'freeze the player and create a modifiable rectangle on the canvas'
+        # make player leave the canvas alone
+        tk_root.after_cancel(self._player._after_handle)
+
+        # create rectangle
+        x, y = self._start_x, self._start_y = self._canvas_xy(event)
+        color = bgr_to_hex(*roitools.BaseRoi.active_color)
+        self._rect = self.create_rectangle(x, y, x, y, outline=color)
+
+    def _ldrag(self, event):
+        'expand the current rectangle'
+        x, y = self._canvas_xy(event)
+        self.coords(self._rect, self._start_x, self._start_y, x, y)
+
+    def _lrelease_add_roi(self, event):
+        'add ROI at selected rectangle, unfreeze player'
+        x, y = self._canvas_xy(event)
+
+        # add ROI
+        vertex1 = (self._start_x, self._start_y)
+        vertex2 = (x, y)
+        roi = roitools.RectRoi(vertex1, vertex2)
+        self._add_roi_helper(roi)
+
+        # cleanup
+        self._re_init()
+
+        # unfreeze player
+        self._player._schedule_next_frame()
+
+    def _add_roi_helper(self, roi):
+        'helper for adding roi to associated player after mouse action'
+        # add ROI to video
+        try:
+            self._player.video.add_roi(roi)
+        except ValueError as e:
+            # happens when maximum number of regions is exceeded
+            tk_log.error(str(e))
+            roitools.BaseRoi._next_id -= 1
+        else:
+            self._player.refresh()
+            tk_active_roi_box.insert(tk.END, roi_info_line(roi))
+            tk_log.append('started region {}'.format(roi._id))
 # ----------------------------
 
 # --- GLOBALS/CONSTANTS ----
@@ -835,9 +955,10 @@ def cb_select_video():
             basename, PLAYER.video.fps, num_frames, 's'*(num_frames > 1))
         tk_log.success(msg)
 
+        # TODO MANUAL
         manual = (
-            'to add a region, set region parameters '
-            'and left click inside video')
+            'ADD A ROI by drawing a rectangle (left mouse)\n'
+            'regions with fixed parameters are added with right click')
         tk_log.append(manual)
 
 # VIDEO PROGRESS
@@ -894,8 +1015,8 @@ def cb_jump(back=False):
     # empty?
     try:
         check_empty(step, description=unit)
-    except ValueError:
-        return
+    except ValueError as e:
+        tk_log.error(str(e))
 
     # get step in frames
     if unit == SECONDS:
@@ -952,45 +1073,6 @@ brightness_increment = 10
 cb_brightness_up = partial(PLAYER.brightness_adjust, brightness_increment)
 cb_brightness_down = partial(PLAYER.brightness_adjust, -brightness_increment)
 cb_brightness_reset = PLAYER.brightness_reset
-
-# ROI CREATION
-def cb_add_roi(event):
-    '''add ROI through PLAYER.video.add_roi based on x, y coordinates
-    and update GUI'''
-    x, y = event.x, event.y
-    start_ms = PLAYER.video.pos_msec
-    start_frame = PLAYER.video.pos_frames
-
-    try:
-        roi = roi_from_click(x, y)
-    except ValueError:
-        return
-
-    # position supported?
-    circ = isinstance(roi, roitools.CircRoi)
-    width, height = PLAYER.video.frame_width, PLAYER.video.frame_height
-
-    if circ and not roi.fits(width, height):
-        msg = 'region out of frame - partial circles are not supported yet'
-        tk_log.error(msg)
-        roitools.BaseRoi._next_id -= 1
-    else:
-        # add roi to frame
-        try:
-            PLAYER.video.add_roi(roi)
-        except ValueError as e:
-            # happens when maximum number of active ROIs is exceeded
-            tk_log.error(str(e))
-        else:
-            PLAYER.refresh()
-
-            # add roi to listbox
-            roi.start_pos_msec = start_ms
-            roi.start_pos_frames = start_frame
-            tk_active_roi_box.insert(tk.END, roi_info_line(roi))
-
-            # log
-            tk_log.append('started region {}'.format(roi._id))
 
 # ROI DELETION
 def selected_ids(listbox):
@@ -1560,6 +1642,7 @@ set_widget_states_loaded = partial(
     set_widget_states, ALL_WIDGETS - {tk_bar}, tk.NORMAL)
 # ----------------------------------
 
+# --- TEST SECTION ---
 if __name__ == '__main__':
     set_widget_states_unloaded()
     tk_root.mainloop()
