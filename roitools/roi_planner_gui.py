@@ -22,7 +22,7 @@
 # TODO: coupling between the player, its canvas and its video is too tight
 # - both player and canvas unidirectionally interact with the video
 # - player and canvas interact bidirectionally
-# (this is not optimal, but not hard to disentangle)
+# (this is not optimal, but hard to disentangle)
 
 # standard library imports
 from __future__ import division
@@ -761,6 +761,8 @@ class VideoPlayer(object):
         self._canvas.create_image(0, 0, anchor=tk.NW, image=image)
 
 class TouchScreen(tk.Canvas, object):
+    # TODO no rectangle selection outside of canvas!
+
     '''a canvas for use with a VideoPlayer instance
     which supports mouse actions ("touching") to add ROIs
     
