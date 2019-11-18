@@ -1,5 +1,9 @@
 'tools for creating and analyzing regions of interest (ROIs) in a video'
 
+# TODO instead of having a circular ROI, implement a general elliptical ROI
+# of which a circular ROI is a special case
+# once this is done, support for drawing ellipses can be added in the GUI
+
 import csv
 from collections import namedtuple
 from datetime import datetime
