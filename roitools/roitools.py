@@ -72,24 +72,21 @@ class BaseRoi(object):
     active_color = Color(green=255, red=0, blue=0)
     passive_color = Color(green=200, red=200, blue=200)
 
-    def __init__(self, vertex1, vertex2, description='N/A', mask=None):
-        '''BaseRoi((x1, y1), (x2, y2)[, description[, mask]])
+    def __init__(self, vertex1, vertex2, description='N/A'):
+        '''BaseRoi((x1, y1), (x2, y2)[, description])
         -> BaseRoi object
 
         vertex1 and vertex2 are opposite vertices of rectangular ROI
-
-        mask: boolean array mask applied to rectangular ROI
 
         description: optional description for ROI'''
         self._id = BaseRoi._next_id
         BaseRoi._next_id += 1
 
         self.deaf = False # flag used to ignore notifications
-        self.cap = None # set when added as an observer by a RoiCap
+        self.cap = None # set when registered as an observer via RoiCap.add_roi
         self.vertex1 = vertex1
         self.vertex2 = vertex2
         self.description = description
-        self.mask = mask
         self.collected = []
 
         # compute center of rectangle for drawing and
@@ -103,6 +100,14 @@ class BaseRoi(object):
         # increment ends by one to get correct values for slicing
         self.end_x += 1
         self.end_y += 1
+
+        # compute the mask
+        self.mask = self.compute_mask()
+
+    def compute_mask(self):
+        '''returns boolean mask (or None) used to customize shape of region
+        (see CircRoi.compute_mask for an example)'''
+        return None
 
     @property
     def roicolor(self):
@@ -143,6 +148,7 @@ class BaseRoi(object):
 
     def get_rect(self):
         'slice rectangular ROI from observed frame (does not apply mask)'
+        # NOTE: applying boolean mask to 2D array flattens array!
         frame = self.cap.latest_frame
         return frame[self.st_y:self.end_y, self.st_x:self.end_x]
 
@@ -205,7 +211,6 @@ class RectRoi(BaseRoi):
 
 class CircRoi(BaseRoi):
     'circular region of interest'
-    # TODO throw error for partial cicles (possibly override notified)
     # TODO support partial circles
 
     def __init__(self, center, radius, description='N/A'):
@@ -216,12 +221,10 @@ class CircRoi(BaseRoi):
         # such as recomputing the center (big whoop)
         v1 = (center[0] - radius, center[1] - radius)
         v2 = (center[0] + radius, center[1] + radius)
-        super(CircRoi, self).__init__(v1, v2, description)
-
         self.radius = radius
         self.radius_sq = radius**2
 
-        self.mask = self.compute_mask()
+        super(CircRoi, self).__init__(v1, v2, description)
 
     def compute_mask(self):
         dx = self.end_x - self.st_x
