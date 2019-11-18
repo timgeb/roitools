@@ -960,8 +960,8 @@ def cb_select_video():
 
         # TODO MANUAL
         manual = (
-            'ADD A ROI by drawing a rectangle (left mouse)\n'
-            'regions with fixed parameters are added with right click')
+            'left click: add ROI by drawing a rectangle\n'
+            'right click: add ROI with fixed parameters')
         tk_log.append(manual)
 
 # VIDEO PROGRESS
