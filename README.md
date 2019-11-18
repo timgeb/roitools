@@ -139,4 +139,6 @@ If the collected data needs to be exported, implementing a `to_file` method is s
 
 Planning the exact location and lifespan of regions of interest can be tedious without visual assistance. This software comes with a graphical user interface for the planning process. A screenshot is shown below.
 
+ROIs can be added by selecting a rectangular region with the left mouse button. Alternatively, ROIs with fixed parameters (width and height or radius) are added with a right click inside the video.
+
 ![GUI](docs/gui.png)
