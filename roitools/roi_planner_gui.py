@@ -780,6 +780,7 @@ class TouchScreen(tk.Canvas, object):
         self._rect = None
 
     def __init__(self, player, master=None, **kwargs):
+        kwargs.setdefault('cursor', 'cross')
         super(TouchScreen, self).__init__(master, **kwargs)
         self._player = player
         self._re_init()
