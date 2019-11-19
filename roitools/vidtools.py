@@ -51,7 +51,7 @@ def pause():
 
 class PyCap(object):
     '''Python adapter/facade for cv2.VideoCapture
-    
+
     - instance attributes can be accessed/set directly via the dot notation,
     e.g. cap.pos_msec = 1000 instead of cap.set(cv2.CAP_PROP_POS_MSEC, 1000)
 
@@ -174,14 +174,20 @@ Color = namedtuple('Color', 'blue green red') # BGR!
 # for the intricacies of sublassing ndarray, see
 # http://docs.scipy.org/doc/numpy/user/basics.subclassing.html
 class Frame(np.ndarray):
-    # TODO: does currently not play nice with some ufuncs,
-    # e.g. np.copy(Frame object) returns ndarray instance
-    # and converting to masked array masks properties and methods
-    # -> needs __array_wrap__ implemented
     '''Frame(array, title) -> Frame object
 
+    used as wrapper for the array cv2.Videocapture.read returns (a BGR image) -
     encapsulates common frame operations, e.g. frame.show() instead of
     cv2.imshow(title, frame) or frame.blue instead of frame[:, :, 0]'''
+
+    # TODO: does currently not play nice with some ufuncs,
+    # e.g. np.copy(frame) returns ndarray instance
+    # and converting to masked array masks properties and methods
+    # -> needs __array_wrap__ implemented
+
+    # TODO: wraps scalar results of ufuncs in a Frame object with empty shape ()
+    # e.g. np.sum(Frame(np.array([1, 2]))) -> Frame(3)
+    # -> needs __array_ufunc__ implemented
 
     def __new__(cls, input_array, title='unnamed'):
         '''Frame(numpy array, title) -> Frame
